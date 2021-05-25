@@ -13,6 +13,7 @@ import 'package:uuid/uuid.dart';
 
 class ProductBloc {
   final _productName = BehaviorSubject<String>();
+  final _categoryName = BehaviorSubject<String>();
   final _unitType = BehaviorSubject<String>();
   final _unitPrice = BehaviorSubject<String>();
   final _availableUnits = BehaviorSubject<String>();
@@ -30,6 +31,7 @@ class ProductBloc {
   //Get
   Stream<String> get productName =>
       _productName.stream.transform(validateProductName);
+  Stream<String> get categoryName => _categoryName.stream;
   Stream<String> get unitType => _unitType.stream;
   Stream<double> get unitPrice =>
       _unitPrice.stream.transform(validateUnitPrice);
@@ -46,6 +48,7 @@ class ProductBloc {
 
   //Set
   Function(String) get changeProductName => _productName.sink.add;
+  Function(String) get changeCategoryName => _categoryName.sink.add;
   Function(String) get changeUnitType => _unitType.sink.add;
   Function(String) get changeUnitPrice => _unitPrice.sink.add;
   Function(String) get changeAvailableUnits => _availableUnits.sink.add;
@@ -55,6 +58,7 @@ class ProductBloc {
 
   dispose() {
     _productName.close();
+    _categoryName.close();
     _unitType.close();
     _unitPrice.close();
     _availableUnits.close();
@@ -68,16 +72,16 @@ class ProductBloc {
   //Functions
   Future<void> saveProduct() async {
     var product = Product(
-      approved: (_product.value == null) ? true : _product.value.approved,
-      availableUnits: int.parse(_availableUnits.value),
-      productId:
-          (_product.value == null) ? uuid.v4() : _product.value.productId,
-      productName: _productName.value.trim(),
-      unitPrice: double.parse(_unitPrice.value),
-      unitType: _unitType.value,
-      vendorId: _vendorId.value,
-      imageUrl: _imageUrl.value
-    );
+        approved: (_product.value == null) ? true : _product.value.approved,
+        availableUnits: int.parse(_availableUnits.value),
+        productId:
+            (_product.value == null) ? uuid.v4() : _product.value.productId,
+        productName: _productName.value.trim(),
+        categoryName: _categoryName.value,
+        unitPrice: double.parse(_unitPrice.value),
+        unitType: _unitType.value,
+        vendorId: _vendorId.value,
+        imageUrl: _imageUrl.value);
 
     return db
         .setProduct(product)
@@ -101,24 +105,31 @@ class ProductBloc {
         _isUploading.sink.add(true);
 
         //Get Image Properties
-        ImageProperties properties = await FlutterNativeImage.getImageProperties(image.path);
+        ImageProperties properties =
+            await FlutterNativeImage.getImageProperties(image.path);
 
         //CropImage
-        if (properties.height > properties.width){
-          var yoffset = (properties.height - properties.width)/2;
-          croppedFile = await FlutterNativeImage.cropImage(image.path, 0, yoffset.toInt(), properties.width, properties.width);
+        if (properties.height > properties.width) {
+          var yoffset = (properties.height - properties.width) / 2;
+          croppedFile = await FlutterNativeImage.cropImage(image.path, 0,
+              yoffset.toInt(), properties.width, properties.width);
         } else if (properties.width > properties.height) {
-          var xoffset = (properties.width- properties.height)/2;
-          croppedFile = await FlutterNativeImage.cropImage(image.path, xoffset.toInt(), 0, properties.height, properties.height);
+          var xoffset = (properties.width - properties.height) / 2;
+          croppedFile = await FlutterNativeImage.cropImage(image.path,
+              xoffset.toInt(), 0, properties.height, properties.height);
         } else {
           croppedFile = File(image.path);
         }
 
         //Resize
-        File compressedFile = await FlutterNativeImage.compressImage(croppedFile.path,quality: 100, targetHeight: 600, targetWidth: 600);
+        File compressedFile = await FlutterNativeImage.compressImage(
+            croppedFile.path,
+            quality: 100,
+            targetHeight: 600,
+            targetWidth: 600);
 
-        var imageUrl = await storageService.uploadProductImage(
-            compressedFile, uuid.v4());
+        var imageUrl =
+            await storageService.uploadProductImage(compressedFile, uuid.v4());
         changeImageUrl(imageUrl);
         _isUploading.sink.add(false);
       } else {

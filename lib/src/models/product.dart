@@ -1,7 +1,8 @@
 import 'package:flutter/foundation.dart';
 
-class Product{
+class Product {
   final String productName;
+  final String categoryName;
   final String unitType;
   final double unitPrice;
   final int availableUnits;
@@ -18,33 +19,36 @@ class Product{
     this.note = "",
     @required this.productId,
     @required this.productName,
-    @required this.unitPrice, 
+    @required this.categoryName,
+    @required this.unitPrice,
     @required this.unitType,
-    @required this.vendorId
+    @required this.vendorId,
   });
 
   Map<String, dynamic> toMap() {
     return {
-      'productName' : productName,
-      'unitType' : unitType,
-      'unitPrice' : unitPrice,
+      'productName': productName,
+      'unitType': unitType,
+      'categoryName': categoryName,
+      'unitPrice': unitPrice,
       'availableUnits': availableUnits,
       'approved': approved,
-      'imageUrl':imageUrl,
-      'note':note,
-      'productId':productId,
-      'vendorId':vendorId
+      'imageUrl': imageUrl,
+      'note': note,
+      'productId': productId,
+      'vendorId': vendorId
     };
   }
 
   Product.fromFirestore(Map<String, dynamic> firestore)
-    : productName = firestore['productName'],
-      unitType = firestore['unitType'],
-      unitPrice = firestore['unitPrice'],
-      availableUnits = firestore['availableUnits'],
-      approved = firestore['approved'],
-      imageUrl = firestore['imageUrl'],
-      note = firestore['note'],
-      productId = firestore['productId'],
-      vendorId = firestore['vendorId'];
+      : productName = firestore['productName'],
+        unitType = firestore['unitType'],
+        categoryName = firestore['categoryName'],
+        unitPrice = firestore['unitPrice'],
+        availableUnits = firestore['availableUnits'],
+        approved = firestore['approved'],
+        imageUrl = firestore['imageUrl'],
+        note = firestore['note'],
+        productId = firestore['productId'],
+        vendorId = firestore['vendorId'];
 }

@@ -4,7 +4,6 @@ import 'package:farmers_market/src/models/market.dart';
 import 'package:farmers_market/src/models/product.dart';
 import 'package:farmers_market/src/models/vendor.dart';
 
-
 class FirestoreService {
   FirebaseFirestore _db = FirebaseFirestore.instance;
 
@@ -20,24 +19,33 @@ class FirestoreService {
         .then((snapshot) => ApplicationUser.fromFirestore(snapshot.data()));
   }
 
+  Stream<List<String>> fetchCategoryTypes() {
+    return _db.collection('cat').doc('category').snapshots().map((snapshot) =>
+        snapshot.data()['pro'].map<String>((type) => type.toString()).toList());
+  }
+
   Stream<List<String>> fetchUnitTypes() {
-    return _db.collection('types').doc('units').snapshots().map(
-        (snapshot) => snapshot.data()['production']
+    return _db.collection('types').doc('units').snapshots().map((snapshot) =>
+        snapshot
+            .data()['production']
             .map<String>((type) => type.toString())
             .toList());
   }
 
   Future<void> setProduct(Product product) {
-    var options = SetOptions(merge:true);
+    var options = SetOptions(merge: true);
     return _db
         .collection('products')
         .doc(product.productId)
-        .set(product.toMap(),options);
+        .set(product.toMap(), options);
   }
 
-  Future<Product> fetchProduct(String productId){
-    return _db.collection('products').doc(productId)
-    .get().then((snapshot) => Product.fromFirestore(snapshot.data()));
+  Future<Product> fetchProduct(String productId) {
+    return _db
+        .collection('products')
+        .doc(productId)
+        .get()
+        .then((snapshot) => Product.fromFirestore(snapshot.data()));
   }
 
   Stream<List<Product>> fetchProductsByVendorId(String vendorId) {
@@ -47,45 +55,43 @@ class FirestoreService {
         .snapshots()
         .map((query) => query.docs)
         .map((snapshot) =>
-            snapshot.map((doc) => Product.fromFirestore(doc.data()))
-        .toList());
+            snapshot.map((doc) => Product.fromFirestore(doc.data())).toList());
   }
 
-  Stream<List<Market>> fetchUpcomingMarkets(){
+  Stream<List<Market>> fetchUpcomingMarkets() {
     return _db
-      .collection('markets')
-      .where('dateEnd', isGreaterThan: DateTime.now().toIso8601String())
-      .snapshots()
-      .map((query) => query.docs)
-      .map((snapshot) => snapshot
-      .map((doc) => Market.fromFirestore(doc.data()))
-      .toList());
+        .collection('markets')
+        .where('dateEnd', isGreaterThan: DateTime.now().toIso8601String())
+        .snapshots()
+        .map((query) => query.docs)
+        .map((snapshot) =>
+            snapshot.map((doc) => Market.fromFirestore(doc.data())).toList());
   }
 
-  Stream<List<Product>> fetchAvailableProducts(){
-    return _db  
-      .collection('products')
-      .where('availableUnits', isGreaterThan: 0)
-      .snapshots()
-      .map((query) => query.docs)
-      .map((snapshot) => snapshot.map((doc) => Product.fromFirestore(doc.data()))
-      .toList());
-  }
-
-  Future<Vendor> fetchVendor(String vendorId){
+  Stream<List<Product>> fetchAvailableProducts() {
     return _db
-      .collection('vendors')
-      .doc(vendorId)
-      .get().then((snapshot) => Vendor.fromFirestore(snapshot.data()));
+        .collection('products')
+        .where('availableUnits', isGreaterThan: 0)
+        .snapshots()
+        .map((query) => query.docs)
+        .map((snapshot) =>
+            snapshot.map((doc) => Product.fromFirestore(doc.data())).toList());
   }
 
-  Future<void> setVendor(Vendor vendor){
-    var options = SetOptions(merge:true);
+  Future<Vendor> fetchVendor(String vendorId) {
+    return _db
+        .collection('vendors')
+        .doc(vendorId)
+        .get()
+        .then((snapshot) => Vendor.fromFirestore(snapshot.data()));
+  }
+
+  Future<void> setVendor(Vendor vendor) {
+    var options = SetOptions(merge: true);
 
     return _db
-      .collection('vendors')
-      .doc(vendor.vendorId)
-      .set(vendor.toMap(),options);
+        .collection('vendors')
+        .doc(vendor.vendorId)
+        .set(vendor.toMap(), options);
   }
-
 }

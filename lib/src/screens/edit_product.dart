@@ -106,6 +106,18 @@ class _EditProductState extends State<EditProduct> {
           child: Divider(color: AppColors.darkblue),
         ),
         StreamBuilder<String>(
+            stream: productBloc.categoryName,
+            builder: (context, snapshot) {
+              return AppDropdownButton(
+                hintText: 'Category',
+                items: items,
+                value: snapshot.data,
+                materialIcon: FontAwesomeIcons.list,
+                cupertinoIcon: FontAwesomeIcons.list,
+                onChanged: productBloc.changeCategoryName,
+              );
+            }),
+        StreamBuilder<String>(
             stream: productBloc.productName,
             builder: (context, snapshot) {
               return AppTextField(
@@ -166,28 +178,40 @@ class _EditProductState extends State<EditProduct> {
             }),
         StreamBuilder<bool>(
           stream: productBloc.isUploading,
-          builder: (context,snapshot){
-            return (!snapshot.hasData || snapshot.data == false)
-            ? Container()
-            : Center(child: (Platform.isIOS) 
-            ? CupertinoActivityIndicator() 
-            : CircularProgressIndicator(),);
-          },),
-        StreamBuilder<String>(
-          stream: productBloc.imageUrl,
           builder: (context, snapshot) {
-            if (!snapshot.hasData || snapshot.data == "")
-            return AppButton(buttonType: ButtonType.Straw, buttonText: 'Add Image',onPressed: productBloc.pickImage,);
-
-            return Column(children: <Widget>[
-              Padding(
-                padding: BaseStyles.listPadding,
-                child: Image.network(snapshot.data),
-              ),
-              AppButton(buttonType: ButtonType.Straw, buttonText: 'Change Image',onPressed: productBloc.pickImage,)
-            ],);
-          }
+            return (!snapshot.hasData || snapshot.data == false)
+                ? Container()
+                : Center(
+                    child: (Platform.isIOS)
+                        ? CupertinoActivityIndicator()
+                        : CircularProgressIndicator(),
+                  );
+          },
         ),
+        StreamBuilder<String>(
+            stream: productBloc.imageUrl,
+            builder: (context, snapshot) {
+              if (!snapshot.hasData || snapshot.data == "")
+                return AppButton(
+                  buttonType: ButtonType.Straw,
+                  buttonText: 'Add Image',
+                  onPressed: productBloc.pickImage,
+                );
+
+              return Column(
+                children: <Widget>[
+                  Padding(
+                    padding: BaseStyles.listPadding,
+                    child: Image.network(snapshot.data),
+                  ),
+                  AppButton(
+                    buttonType: ButtonType.Straw,
+                    buttonText: 'Change Image',
+                    onPressed: productBloc.pickImage,
+                  )
+                ],
+              );
+            }),
         StreamBuilder<bool>(
             stream: productBloc.isValid,
             builder: (context, snapshot) {
@@ -210,6 +234,7 @@ class _EditProductState extends State<EditProduct> {
     if (product != null) {
       //Edit
       productBloc.changeUnitType(product.unitType);
+      productBloc.changeCategoryName(product.categoryName);
       productBloc.changeProductName(product.productName);
       productBloc.changeUnitPrice(product.unitPrice.toString());
       productBloc.changeAvailableUnits(product.availableUnits.toString());
@@ -217,6 +242,7 @@ class _EditProductState extends State<EditProduct> {
     } else {
       //Add
       productBloc.changeUnitType(null);
+      productBloc.changeCategoryName(null);
       productBloc.changeProductName(null);
       productBloc.changeUnitPrice(null);
       productBloc.changeAvailableUnits(null);

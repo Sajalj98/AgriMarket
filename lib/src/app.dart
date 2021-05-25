@@ -35,7 +35,8 @@ class _AppState extends State<App> {
         Provider(create: (context) => customerBloc,),
         Provider(create: (context) => vendorBloc,),
         FutureProvider(create: (context) => authBloc.isLoggedIn()),
-        StreamProvider(create: (context) => firestoreService.fetchUnitTypes())
+        StreamProvider(create: (context) => firestoreService.fetchUnitTypes()),
+        //StreamProvider(create: (context) => firestoreService.fetchCategoryTypes())
       ],
       child: PlatformApp());
   }

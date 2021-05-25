@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:farmers_market/pages/cart.dart';
 import 'package:farmers_market/src/blocs/auth_bloc.dart';
 import 'package:farmers_market/src/screens/news_screen.dart';
+import 'package:farmers_market/src/widgets/products_customer.dart';
 
 import 'package:flutter/material.dart';
 import 'package:carousel_pro/carousel_pro.dart';
@@ -194,13 +195,13 @@ class _CustomerScreenState extends State<CustomerScreen> {
           new Padding(
               padding: const EdgeInsets.all(16.0),
               child: new Text(
-                'Recent Products',
+                'All Products',
                 style: TextStyle(
                     color: Colors.green.withOpacity(1.0),
                     fontWeight: FontWeight.bold),
               )),
           Flexible(
-            child: Products(),
+            child: ProductsCustomer(),
           )
         ],
       ),
