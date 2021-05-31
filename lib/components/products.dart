@@ -1,5 +1,8 @@
+//product
+
 import 'package:flutter/material.dart';
 import 'package:farmers_market/pages/product_details.dart';
+
 class Products extends StatefulWidget {
   @override
   _ProductState createState() => _ProductState();
@@ -70,8 +73,7 @@ class Singleprod extends StatelessWidget {
                   builder: (context) => new ProductDetails(
                         productDetailname: prodName,
                         productDetailpic: prodPicture,
-                        productDetailnewprice: prodOldprice,
-                        productDetailoldprice: prodPrice,
+                        productDetailprice: prodOldprice,
                       ))),
               child: GridTile(
                   footer: Container(

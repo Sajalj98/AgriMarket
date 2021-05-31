@@ -39,28 +39,36 @@ class ProductsCustomer extends StatelessWidget {
                         return Column(
                           children: [
                             ListTile(
-                              leading: CircleAvatar(
-                                backgroundImage: (product.imageUrl != '')
-                                    ? NetworkImage(product.imageUrl)
-                                    : AssetImage(
-                                        'assets/images/vegetables.png'),
-                                radius: 25.0,
-                              ),
-                              title: Text(product.productName,
-                                  style: TextStyles.listTitle),
-                              subtitle: Text('The Vendor'),
-                              trailing: Text(
-                                  '${formatCurrency.format(product.unitPrice)}/${product.unitType}',
-                                  style: TextStyles.bodyLightBlue),
-                                onTap: () => Navigator.of(context).push(new MaterialPageRoute(
-                  //passing product details to the new page
-                  builder: (context) => new ProductDetails(
-                        productDetailname: '',
-                        productDetailpic: '',
-                        productDetailnewprice: '',
-                        productDetailoldprice: 'prodPrice',
-                      ))),
-                            ),
+                                leading: CircleAvatar(
+                                  backgroundImage: (product.imageUrl != '')
+                                      ? NetworkImage(product.imageUrl)
+                                      : AssetImage(
+                                          'assets/images/vegetables.png'),
+                                  radius: 25.0,
+                                ),
+                                title: Text(product.productName,
+                                    style: TextStyles.listTitle),
+                                subtitle: Text('The Vendor'),
+                                trailing: Text(
+                                    '${formatCurrency.format(product.unitPrice)}/${product.unitType}',
+                                    style: TextStyles.bodyLightBlue),
+                                onTap: () => Navigator.of(context).push(
+                                    new MaterialPageRoute(
+                                        //passing product details to the new page
+                                        builder: (context) =>
+                                            new ProductDetails(
+                                                productDetailcategory: product
+                                                    .categoryName,
+                                                productDetailname:
+                                                    product.productName,
+                                                productDetailunittype:
+                                                    product.unitType,
+                                                productDetailprice:
+                                                    product.unitPrice,
+                                                productDetailavailableunits:
+                                                    product.availableUnits,
+                                                productDetailpic:
+                                                    product.imageUrl)))),
                             Divider(
                               color: AppColors.lightgray,
                             )
@@ -74,7 +82,7 @@ class ProductsCustomer extends StatelessWidget {
                   color: AppColors.straw,
                   child: (Platform.isIOS)
                       ? Icon(
-                          IconData(0xF38B,
+                          const IconData(0xF38B,
                               fontFamily: CupertinoIcons.iconFont,
                               fontPackage: CupertinoIcons.iconFontPackage),
                           color: Colors.white,

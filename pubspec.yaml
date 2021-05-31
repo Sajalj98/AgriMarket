@@ -25,8 +25,8 @@ dependencies:
   cupertino_icons: ^1.0.3
   cupertino_toolbar: ^1.0.0
   date_format: ^2.0.2
-  firebase_auth: ^1.1.4
-  firebase_core: ^1.1.1
+  firebase_auth: ^1.2.0
+  firebase_core: ^1.2.0
   firebase_storage: ^8.0.6
   flutter_native_image: ^0.0.6
   fluttertoast: ^8.0.6

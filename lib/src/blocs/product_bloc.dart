@@ -98,7 +98,7 @@ class ProductBloc {
     var permissionStatus = await Permission.photos.status;
     if (permissionStatus.isGranted) {
       //Get Image From Device
-      image = await _picker.getImage(source: ImageSource.gallery);
+      image = await _picker.getImage(source: ImageSource.camera);
 
       //Upload to Firebase
       if (image != null) {

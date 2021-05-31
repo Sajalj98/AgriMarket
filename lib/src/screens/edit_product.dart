@@ -198,18 +198,30 @@ class _EditProductState extends State<EditProduct> {
                   onPressed: productBloc.pickImage,
                 );
 
-              return Column(
-                children: <Widget>[
-                  Padding(
-                    padding: BaseStyles.listPadding,
-                    child: Image.network(snapshot.data),
-                  ),
-                  AppButton(
-                    buttonType: ButtonType.Straw,
-                    buttonText: 'Change Image',
-                    onPressed: productBloc.pickImage,
-                  )
-                ],
+              return SingleChildScrollView(
+                child: Column(
+                  children: <Widget>[
+                    Padding(
+                      padding: BaseStyles.listPadding,
+                      child: Image.network(snapshot.data),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        AppButton(
+                          buttonType: ButtonType.Straw,
+                          buttonText: 'Change Image',
+                          onPressed: productBloc.pickImage,
+                        ),
+                        AppButton(
+                          buttonType: ButtonType.Straw,
+                          buttonText: 'Change Image', 
+                          onPressed: productBloc.pickImage,
+                        ),
+                      ],
+                    )
+                  ],
+                ),
               );
             }),
         StreamBuilder<bool>(

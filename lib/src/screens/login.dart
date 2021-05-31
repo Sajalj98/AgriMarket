@@ -98,7 +98,7 @@ class _LoginState extends State<Login> {
               return AppTextField(
                 isIOS: Platform.isIOS,
                 hintText: 'Password',
-                cupertinoIcon: IconData(0xf4c9,
+                cupertinoIcon: const IconData(0xf4c9,
                     fontFamily: CupertinoIcons.iconFont,
                     fontPackage: CupertinoIcons.iconFontPackage),
                 materialIcon: Icons.lock,

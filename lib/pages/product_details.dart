@@ -1,15 +1,20 @@
 import 'package:flutter/material.dart';
 
 class ProductDetails extends StatefulWidget {
+  final productDetailcategory;
   final productDetailname;
+  final productDetailunittype;
+  final productDetailprice;
+  final productDetailavailableunits;
   final productDetailpic;
-  final productDetailoldprice;
-  final productDetailnewprice;
-  ProductDetails(
-      {this.productDetailname,
-      this.productDetailpic,
-      this.productDetailoldprice,
-      this.productDetailnewprice});
+  ProductDetails({
+    this.productDetailcategory,
+    this.productDetailname,
+    this.productDetailunittype,
+    this.productDetailprice,
+    this.productDetailavailableunits,
+    this.productDetailpic,
+  });
   @override
   _ProductDetailsState createState() => _ProductDetailsState();
 }
@@ -44,7 +49,12 @@ class _ProductDetailsState extends State<ProductDetails> {
                 child: GridTile(
                   child: Container(
                     color: Colors.white70,
-                    child: Image.asset(widget.productDetailpic),
+                    child: (widget.productDetailpic != '')
+                        ? new Image.network(widget.productDetailpic)
+                        : new Image.asset('assets/images/vegetables.png'),
+
+                    //new Image.network(widget.productDetailpic),
+                    //child: Image.asset(widget.productDetailpic),
                   ),
                   footer: new Container(
                     color: Colors.white,
@@ -57,19 +67,11 @@ class _ProductDetailsState extends State<ProductDetails> {
                       title: new Row(children: <Widget>[
                         Expanded(
                             child: new Text(
-                                "\u{20B9}${widget.productDetailoldprice}",
+                                "\u{20B9}${widget.productDetailprice} per ${widget.productDetailunittype}",
                                 style: TextStyle(
-                                    color: Colors.grey,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 17,
-                                    decoration: TextDecoration.lineThrough))),
-                        Expanded(
-                            child: new Text(
-                                "\u{20B9}${widget.productDetailnewprice}",
-                                style: TextStyle(
-                                  color: Colors.red,
+                                  color: Colors.black,
                                   fontWeight: FontWeight.bold,
-                                  fontSize: 17,
+                                  fontSize: 18,
                                 ))),
                       ]),
                     ),
@@ -122,15 +124,11 @@ class _ProductDetailsState extends State<ProductDetails> {
                         color: Colors.green,
                         textColor: Colors.white,
                         elevation: 0.3,
-                        child: new Text("Buy Now"))),
+                        child: new Text("Add to cart"))),
                 new IconButton(
                     icon: Icon(Icons.add_shopping_cart),
                     color: Colors.green,
                     onPressed: () {}),
-                new IconButton(
-                    icon: Icon(Icons.favorite_border),
-                    color: Colors.green,
-                    onPressed: () {})
               ],
             )
           ],
